@@ -453,5 +453,5 @@ if white == true then
     elseif black == true then
      game.Players.LocalPlayer:Kick("Error! User blacklisted.")
     else
-        game.Players.LocalPlayer:Kick("Not Whitelisted! HWID: COPIED TO CLIPBOARD", whiteclipboard(HWID))
+        game.Players.LocalPlayer:Kick("Not Whitelisted! HWID: COPIED TO CLIPBOARD", setclipboard(HWID))
 end
