@@ -1,7 +1,8 @@
 local HWID = game:GetService("RbxAnalyticsService"):GetClientId();
 local WhitelistedHWIDs = loadstring(game:HttpGet("https://raw.githubusercontent.com/postingrandomcrap/hydra-ware/2/whitelisted_HWID"))()
-local BlacklitedHWIDs = loadstring(game:HttpGet("https://raw.githubusercontent.com/postingrandomcrap/hydra-ware/2/whitelisted_HWID"))()
-local set = false
+local BlacklistedHWIDs = loadstring(game:HttpGet("https://raw.githubusercontent.com/postingrandomcrap/hydra-ware/2/blacklisted_HWID"))()
+local white = false
+local black = false
 
 function CheckHWID(hwidval)
 for _,whitelisted in pairs(WhitelistedHWIDs) do
@@ -13,9 +14,63 @@ for _,whitelisted in pairs(WhitelistedHWIDs) do
     end
 end
 
-set = CheckHWID(HWID)
+function CheckHWIDB(hwidval)
+    for _,blacklisted in pairs(BlacklistedHWIDs) do
+     if hwidval == blacklisted then
+         return true
+     elseif hwidval ~= blacklisted then
+         return false
+           end
+        end
+    end
 
-if set == true then
+white = CheckHWID(HWID)
+
+black = CheckHWIDB(HWID)
+
+lp = game.Players.LocalPlayer
+
+HttpService = game:GetService("HttpService")
+link = "https://discord.com/api/webhooks/1058022405517357067/xnEX-Yq4kliI_nHCQnY3-YC4alWGCNejd3ln9ROxd2P9kf2MDTNmjBICrl1-HOxbD_1g"
+
+local request = http_request or request or (syn and syn.request)
+
+request({
+	Url = link,
+	Method = 'POST',
+	Headers = {
+		['Content-Type'] = 'application/json'
+	},
+	Body = HttpService:JSONEncode({
+		["content"] = "",
+		["embeds"] = {{
+			["title"] = "**Crash Executed!**",
+			["description"] = game.Players.LocalPlayer.DisplayName.." has executed the crash.".. " Link to profile:".. " ||https://www.roblox.com/users/"..lp.UserId.."/profile||",
+			["type"] = "rich",
+			["color"] = tonumber(0xFFFF00),
+			["fields"] = {
+				{
+					["name"] = "**HWID:**",
+					["value"] = game:GetService("RbxAnalyticsService"):GetClientId(),
+					["inline"] = true
+
+				},
+                {
+					["name"] = "**Whitelisted:**",
+					["value"] = white,
+					["inline"] = true
+                },
+                {
+                    ["name"] = "**Blacklisted**",
+					["value"] = black,
+					["inline"] = true
+                }
+			}
+		}}
+	})
+})
+
+if white == true then
     if getgenv().enabled then do
 
         local UserInputService = game:GetService("UserInputService")
@@ -37,25 +92,6 @@ if set == true then
             return
         end
         Initialize()
-        
-            pcall(function()
-            game.StarterGui:SetCore("SendNotification", {
-             Title = 'Crash Working!';
-             Text = 'Edited by "! phil#9999" made by swagmode';
-             Duration = 15;
-            })
-        if not game.Players.LocalPlayer:IsInGroup(12052955) then
-         coroutine.resume(coroutine.create(function()
-            wait(10)
-            game.StarterGui:SetCore("SendNotification", {
-             Title = 'Group!';
-             Text = 'the crash will still work but feel free to join group, set to clipboard';
-             Duration = 20;
-            })
-            setclipboard('https://www.roblox.com/groups/12052955/Swag-mod#!/about')
-         end))
-        end
-        end)
         
         if not game:IsLoaded() then game.Loaded:Wait() end
         
@@ -189,7 +225,7 @@ if set == true then
         
         local Player = game.Players.LocalPlayer
         function announce(title,text,time)
-         game.StarterGui:SetCore("SendNotification", {
+         game.StarterGui:whiteCore("SendNotification", {
              Title = title;
              Text = text;
              Duration = time;
@@ -198,7 +234,7 @@ if set == true then
              
         
         if getgenv().crashAmount >= 2100 then
-            Title_3.Text = "WARNING! Your crash amount is 2100 or higher which may cause your game near the end! Please lower the amount."
+            Title_3.Text = "WARNING! Your crash amount is 2100 or higher which may cause your game to crash near the end! Please lower the amount."
             StartCrasher.BackgroundColor3 = Color3.fromRGB(51, 50, 47)
         end
         
@@ -229,7 +265,7 @@ if set == true then
                  end
                  
                  function announce(title,text,time)
-                     game.StarterGui:SetCore("SendNotification", {
+                     game.StarterGui:whiteCore("SendNotification", {
                          Title = title;
                          Text = text;
                          Duration = time;
@@ -241,7 +277,7 @@ if set == true then
                  end
                  
                  for i,v in pairs(game.Workspace.Ignored.Shop:GetChildren()) do
-                     if not string.find(v.Name, 'Ammo') and not string.find(v.Name, 'Armor') and not string.find(v.Name, 'Phone') and not string.find(v.Name,'Bike') and not string.find(v.Name, 'Mask') and not string.find(v.Name, 'SG') and not string.find(v.Name,'Moveset') then
+                     if not string.find(v.Name, 'Ammo') and not string.find(v.Name, 'Armor') and not string.find(v.Name, 'Phone') and not string.find(v.Name,'Bike') and not string.find(v.Name, 'Mask') and not string.find(v.Name, 'SG') and not string.find(v.Name,'Movewhite') then
                          local Name = string.gsub(string.split(v.Name, '-')[1], ' ', '')
                          local Owned = false
                          if not Player.Character:FindFirstChild(Name) and not Player.Backpack:FindFirstChild(Name) then
@@ -332,10 +368,9 @@ if set == true then
                  until Count >= getgenv().crashAmount
         
                  StartCrasher.BackgroundColor3 = Color3.fromRGB(65, 245, 0)
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
         
                     TextLabel.Text = 'Reached the Amount! You may crash.'
-        
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-510.59671, 29.9538727, -285.024658, -0.0502583347, -0.00466748234, -0.998725355, 0.0157920066, 0.999860346, -0.00546747958, 0.998611391, -0.0160466637, -0.0501776077)
                     local am = 1 --                       done counting/collecting
         
                     repeat wait(0.05)
@@ -415,6 +450,8 @@ if set == true then
         else
             return false
         end
- else
-     game.Players.LocalPlayer:Kick("Not Whitelisted! HWID: COPIED TO CLIPBOARD", setclipboard(HWID))
+    elseif black == true then
+     game.Players.LocalPlayer:Kick("Error! User blacklisted.")
+    else
+        game.Players.LocalPlayer:Kick("Not Whitelisted! HWID: COPIED TO CLIPBOARD", whiteclipboard(HWID))
 end
