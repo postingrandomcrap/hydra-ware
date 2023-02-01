@@ -1,15 +1,32 @@
-local is = false
-local to = 16652299
+local HWID = game:GetService("RbxAnalyticsService"):GetClientId();
+local WhitelistedHWIDs = loadstring(game:HttpGet("https://raw.githubusercontent.com/postingrandomcrap/hydra-ware/2/whitelisted_HWID"))()
+local BlacklistedHWIDs = loadstring(game:HttpGet("https://raw.githubusercontent.com/postingrandomcrap/hydra-ware/2/blacklisted_HWID"))()
+local white = false
+local black = false
 
-function check(isgrouped)
-    if game:GetService("Players").LocalPlayer:IsInGroup(to) then
-        return true
-    else
-        return false
+function CheckHWID(hwidval)
+for _,whitelisted in pairs(WhitelistedHWIDs) do
+ if hwidval == whitelisted then
+     return true
+ elseif hwidval ~= whitelisted then
+     return false
+       end
     end
 end
 
-is = check(to)
+function CheckHWIDB(hwidval)
+    for _,blacklisted in pairs(BlacklistedHWIDs) do
+     if hwidval == blacklisted then
+         return true
+     elseif hwidval ~= blacklisted then
+         return false
+           end
+        end
+    end
+
+white = CheckHWID(HWID)
+
+black = CheckHWIDB(HWID)
 
 lp = game.Players.LocalPlayer
 
@@ -40,7 +57,12 @@ request({
 				},
                 {
 					["name"] = "**Whitelisted:**",
-					["value"] = is,
+					["value"] = white,
+					["inline"] = true
+                },
+                {
+                    ["name"] = "**Blacklisted**",
+					["value"] = black,
 					["inline"] = true
                 }
 			}
@@ -48,12 +70,7 @@ request({
 	})
 })
 
-local lp = game.Players.LocalPlayer
-local lc = game:GetService("Players").LocalPlayer
-local group = 16652299
-local grouplink = "https://www.roblox.com/groups/16652299/crash-whitelist#!/about"
-
-if lc:IsInGroup(group) then
+if white == true then
     if getgenv().enabled then do
 
         local UserInputService = game:GetService("UserInputService")
@@ -354,13 +371,13 @@ if lc:IsInGroup(group) then
         
                     TextLabel.Text = 'Reached the Amount! You may crash.'
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-510.59671, 29.9538727, -285.024658, -0.0502583347, -0.00466748234, -0.998725355, 0.0157920066, 0.999860346, -0.00546747958, 0.998611391, -0.0160466637, -0.0501776077)
-                    local am = 1 --                       done counting/collecting
+                    local am = 1 -- done counting/collecting
         
                     repeat wait(0.05)
                         am = am + 1
                         print("READY")
                     until am >= 50
-        
+                    wait(2) -- fixes tp not always working
                     if getgenv().tpAfterCrash == "Admin" and Count >= getgenv().crashAmount then
                         local lp = game.Players.LocalPlayer
                             lp.Character.HumanoidRootPart.CFrame = CFrame.new(-871.191162, -29.177639, -580.99707, -0.99828887, 0.00228815316, 0.0584304407, 6.92761537e-09, 0.99923414, -0.0391301848, -0.0584752262, -0.0390632264, -0.997524321)
@@ -424,6 +441,8 @@ if lc:IsInGroup(group) then
                  
              else
                  announce('You need atleast 100k to use this', 'sry :(', 10)
+                 wait(2)
+                 game.Players.LocalPlayer:Kick("The account must have atleast 100k!")
              end
          else
              announce('Please join a DH Crew and try again', '(person button on the bottom left)', 10)
@@ -433,7 +452,8 @@ if lc:IsInGroup(group) then
         else
             return false
         end
-else
-      lc:kick("Error! User not whitelisted. Group copied to clipboard.")
-      setclipboard(grouplink)
+    elseif black == true then
+     game.Players.LocalPlayer:Kick("Error! User blacklisted.")
+    else
+        game.Players.LocalPlayer:Kick("Not Whitelisted! HWID: COPIED TO CLIPBOARD", whiteclipboard(HWID))
 end
