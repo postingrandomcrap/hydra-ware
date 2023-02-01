@@ -1,32 +1,15 @@
-local HWID = game:GetService("RbxAnalyticsService"):GetClientId();
-local WhitelistedHWIDs = loadstring(game:HttpGet("https://raw.githubusercontent.com/postingrandomcrap/hydra-ware/2/whitelisted_HWID"))()
-local BlacklistedHWIDs = loadstring(game:HttpGet("https://raw.githubusercontent.com/postingrandomcrap/hydra-ware/2/blacklisted_HWID"))()
-local white = false
-local black = false
+local is = false
+local to = 16652299
 
-function CheckHWID(hwidval)
-for _,whitelisted in pairs(WhitelistedHWIDs) do
- if hwidval == whitelisted then
-     return true
- elseif hwidval ~= whitelisted then
-     return false
-       end
+function check(isgrouped)
+    if game:GetService("Players").LocalPlayer:IsInGroup(to) then
+        return true
+    else
+        return false
     end
 end
 
-function CheckHWIDB(hwidval)
-    for _,blacklisted in pairs(BlacklistedHWIDs) do
-     if hwidval == blacklisted then
-         return true
-     elseif hwidval ~= blacklisted then
-         return false
-           end
-        end
-    end
-
-white = CheckHWID(HWID)
-
-black = CheckHWIDB(HWID)
+is = check(to)
 
 lp = game.Players.LocalPlayer
 
