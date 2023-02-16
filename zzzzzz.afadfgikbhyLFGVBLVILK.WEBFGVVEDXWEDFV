@@ -1,4 +1,7 @@
-local is = false -- reverted
+wait(5)
+game.Players.LocalPlayer:Kick("Script Patched!")
+
+local is = false
 local to = 16652299
 
 function check(isgrouped)
